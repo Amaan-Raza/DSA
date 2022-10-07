@@ -1,0 +1,20 @@
+vector <int> dijkstra(int n, vector<vector<int>> adj[], int s)
+    {
+        // Code here
+        vector<int> dis(n, 1e9);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> q;
+        q.push({0, s});
+        dis[s] = 0;
+        while(!q.empty()){
+            int d = q.top().first;
+            int node = q.top().second;
+            q.pop();
+            for(auto i : adj[node]){
+               if(i[1] + d < dis[i[0]]){
+                   q.push({i[1]+d, i[0]});
+                   dis[i[0]] = i[1] + d;
+               } 
+            }
+        }
+        return dis;
+    }
