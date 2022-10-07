@@ -1,3 +1,5 @@
+Using Min-Heap:
+
 vector <int> dijkstra(int n, vector<vector<int>> adj[], int s)
     {
         // Code here
@@ -14,6 +16,33 @@ vector <int> dijkstra(int n, vector<vector<int>> adj[], int s)
                    q.push({i[1]+d, i[0]});
                    dis[i[0]] = i[1] + d;
                } 
+            }
+        }
+        return dis;
+    }
+
+Using set:
+
+vector <int> dijkstra(int n, vector<vector<int>> adj[], int source)
+    {
+        // Code here
+        vector<int> dis(n, 1e9);
+        set<pair<int,int>> s;
+        s.insert({0, source});
+        dis[source] = 0;
+        while(!s.empty()){
+            auto i = *(s.begin());
+            int node = i.second;
+            int d = i.first;
+            s.erase(i);
+            for(auto it : adj[node]){
+               int weight = it[1];
+               int adjNode = it[0];
+               if(weight + d < dis[adjNode]){
+                   if(dis[adjNode] != 1e9) s.erase({dis[adjNode], adjNode});
+                   dis[adjNode] = weight + d;
+                   s.insert({dis[adjNode], adjNode});
+               }
             }
         }
         return dis;
