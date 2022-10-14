@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        long long mod = 1e9 + 7;
+        vector<pair<long long,long long>> adj[n];
+        for(auto i : roads){
+            int u = i[0], v = i[1], time = i[2];
+            adj[u].push_back({v,time});
+            adj[v].push_back({u,time});
+            
+        }
+        
+        priority_queue<pair<long long,long long>, vector<pair<long long,long long>>, greater<pair<long long,long long>>> minHeap;
+        vector<long long> dis(n,LONG_MAX), ways(n+1,0);
+        minHeap.push({0,0});
+        dis[0] = 0;
+        ways[0] = 1;
+        while(!minHeap.empty()){
+            auto i = minHeap.top();
+            minHeap.pop();
+            long long t = i.first;
+            long long node = i.second;
+            for(auto it : adj[node]){
+                if(t + it.second < dis[it.first]){
+                    minHeap.push({it.second + t, it.first});
+                    dis[it.first] = it.second + t;
+                    ways[it.first] = ways[node];
+                }
+                else if(it.second + t == dis[it.first]){
+                    ways[it.first] = (ways[it.first] + ways[node])%mod;
+                }
+            }
+        }
+
+        return ways[n-1];
+        
+    }
+};
